@@ -23,8 +23,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
-#include <string.h>
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -351,23 +349,21 @@ void USB_CDC_RxHandler(uint8_t* buf, uint32_t len)
 {
     reset_led_pins();
     
-    GPIO_TypeDef* GPIO_Port;
-    uint16_t GPIO_Pin;
+    // default GPIO port and pin is RED
+    GPIO_TypeDef* GPIO_Port = LD3_GPIO_Port;
+    uint16_t GPIO_Pin = LD3_Pin;
 
-    if (strcmp(buf, "4")) {
+    if (buf[0] == '4') {
       GPIO_Port = LD4_GPIO_Port;
       GPIO_Pin = LD4_Pin;
-    } else if (strcmp(buf, "5"))
+    } else if (buf[0] == '5')
     {
       GPIO_Port = LD5_GPIO_Port;
       GPIO_Pin = LD5_Pin;
-    } else if (strcmp(buf, "6"))
+    } else if (buf[0] == '6')
     {
       GPIO_Port = LD6_GPIO_Port;
       GPIO_Pin = LD6_Pin;
-    } else {
-      GPIO_Port = LD3_GPIO_Port;
-      GPIO_Pin = LD3_Pin;
     }
     
     HAL_GPIO_WritePin(GPIO_Port, GPIO_Pin, 1);
